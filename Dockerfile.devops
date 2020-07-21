@@ -1,0 +1,48 @@
+FROM python:3.8-buster
+
+RUN pip install --upgrade pip && \
+    pip install --upgrade setuptools
+
+WORKDIR /app
+SHELL ["/bin/bash", "-c"]
+CMD ["/bin/bash"]
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+ENV TEST_DB_USER rffa
+ENV TEST_DB_PASSWORD rffa
+ENV TEST_DB_NAME rffa
+ENV TEST_DB_SCHEMA rffa
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+      && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+      && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+      && apt update && apt install -y \
+        sudo build-essential nodejs \
+        postgresql postgis postgresql-contrib \ 
+      && apt install --no-install-recommends yarn \
+      && echo "alias node=nodejs" >> ~/.bashrc \
+      && alias node=nodejs \
+      && yarn global add apidoc \
+      && service postgresql start \
+      && sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';" \
+      && sudo -u postgres psql -c "CREATE DATABASE ${TEST_DB_NAME} WITH ENCODING 'UTF8';" \
+      && sudo -u postgres psql -c "CREATE USER ${TEST_DB_USER} WITH ENCRYPTED PASSWORD '${TEST_DB_PASSWORD}';" \
+      && sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${TEST_DB_NAME} TO ${TEST_DB_USER};" \
+      && sudo -u postgres PGPASSWORD=${TEST_DB_PASSWORD} psql --username ${TEST_DB_USER} --host=localhost --dbname=${TEST_DB_NAME} -c "CREATE SCHEMA ${TEST_DB_SCHEMA};"
+      
+ENV TEST_DATABASE_URL postgresql://rffa:rffa@localhost/rffa?sslmode=disable
+
+ENV ACCESS_TOKEN_SECRET secret
+
+COPY ./api-server/requirements.txt /app/requirements.txt
+COPY ./api-server/requirements-dev.txt /app/requirements-dev.txt
+RUN pip install -r requirements.txt && \
+      pip install -r requirements-dev.txt && \
+      rm requirements.txt requirements-dev.txt
+
+
+
+

@@ -1,0 +1,61 @@
+version: '3'
+services:
+  db:
+    image: postgres:12-alpine
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    ports:
+    - 54320:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${APP_NAME}
+
+  testdb:
+    image: postgres:12-alpine
+    volumes:
+    - testdb_data:/var/lib/postgresql/data
+    ports:
+    - 54321:5432
+    environment:
+      POSTGRES_USER: ${APP_NAME}
+      POSTGRES_PASSWORD: ${APP_NAME}
+      POSTGRES_DB: ${APP_NAME}
+
+
+  api-server:
+    build:
+      context: ./api-server
+    ports:
+    - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db/${APP_NAME}?sslmode=disable
+      APP_NAME: ${APP_NAME}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      WEB_CONCURRENCY: "2"
+    command: ["uvicorn", "--host", "0.0.0.0", "rffa:app", "--reload"]
+    links:
+    - db
+    volumes:
+    - ./api-server:/app
+
+  devops:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.devops
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db/${APP_NAME}?sslmode=disable
+      TEST_DATABASE_URL: postgresql://${APP_NAME}:${APP_NAME}@testdb/${APP_NAME}?sslmode=disable
+      APP_NAME: ${APP_NAME}
+    command: ["tail", "-f", "/dev/null"]
+    links:
+    - testdb
+    - db
+    volumes:
+    - ./api-server:/app
+
+volumes:
+  db_data:
+    driver: local
+  testdb_data:
+    driver: local
