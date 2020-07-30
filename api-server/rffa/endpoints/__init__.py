@@ -1,5 +1,7 @@
 from . import ping
+from . import user
 
 __all__ = [
-    'ping'
+    'ping',
+    'user',
 ]
