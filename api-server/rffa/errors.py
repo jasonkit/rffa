@@ -1,10 +1,19 @@
 from typing import Any, Optional
 
 from fastapi import status
-from pydantic import BaseModel
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, create_model
+
+from rffa.config import config
 
 
+def error_responses(*error_cls):
+    return {
+        error_cls.status_code: {
+            'model': error_cls.response_model()
+        }
+        for error_cls in error_cls
+    }
 
 
 class ErrorResponse(BaseModel):
@@ -60,3 +69,13 @@ class InvalidRequestError(RFFAHTTPError):
     message = 'Invalid request body'
 
 
+class UsernameAlreadyUsedError(RFFAHTTPError):
+    status_code = status.HTTP_409_CONFLICT
+    error_code = 2000
+    message = 'Username is already used'
+
+
+class InvalidCredentialError(RFFAHTTPError):
+    status_code = status.HTTP_400_BAD_REQUEST
+    error_code = 2001
+    message = 'Invalid credential'
