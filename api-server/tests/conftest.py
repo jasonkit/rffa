@@ -1,12 +1,13 @@
 import os
 
-from fastapi.testclient import TestClient
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import pytest
 
-from rffa.app import app
 from rffa.config import config
+
+from tests.context import TestContext
+
 
 ENGINE = create_engine(os.getenv('TEST_DATABASE_URL'))
 SESSION = sessionmaker()
@@ -25,6 +26,6 @@ def db_session():
     session.close()
 
 
-@pytest.fixture(scope="session")
-def client():
-    return TestClient(app)
+@pytest.fixture()
+def context(db_session):
+    return TestContext(db_session)

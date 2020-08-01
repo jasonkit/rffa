@@ -6,15 +6,13 @@ from rffa.models.user import (
     UserRole
 )
 
+from tests.fixtures.models import minimal_user_data
+
 
 def test_create_user(db_session):
 
     start_at = datetime.utcnow()
-
-    user_data = {
-        'username': 'johndoe',
-        'password': 'password',
-    }
+    user_data = minimal_user_data()
 
     user = User(**user_data)
     db_session.add(user)
