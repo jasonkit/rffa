@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    name: Run test job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build devops image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          dockerfile: "Dockerfile.devops"
+          image_name: devops
+      - name: Run test
+        env:
+          IN_CI: "1"
+        uses: ./.ci-action/
+

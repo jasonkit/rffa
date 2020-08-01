@@ -1,0 +1,10 @@
+name: 'rffa-test-action'
+description: 'Run test for rffa'
+runs:
+  using: 'docker'
+  image: 'docker.pkg.github.com/jasonkit/rffa/devops'
+  entrypoint: 'bash'
+  args:
+  - -c 
+  - "make ci"
+
