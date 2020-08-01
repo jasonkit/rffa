@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 from fastapi import status
 from fastapi.responses import JSONResponse
@@ -26,7 +26,7 @@ class RFFAHTTPError(Exception):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     error_code = 1000
     message = 'Unknown server error'
-    headers: Optional[Any] = None
+    headers: Optional[Dict[str, str]] = None
 
     def __init__(self, detail: Any = None):
         self.detail = detail
@@ -79,3 +79,12 @@ class InvalidCredentialError(RFFAHTTPError):
     status_code = status.HTTP_400_BAD_REQUEST
     error_code = 2001
     message = 'Invalid credential'
+
+
+class InvalidTokenError(RFFAHTTPError):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    error_code = 2002
+    message = 'Invalid access token'
+    headers = {
+        'WWW-Authenticate': 'Bearer realm="{}"'.format(config.app_name)
+    }
