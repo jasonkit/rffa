@@ -47,8 +47,9 @@ ci: test-api
 test-api: upgrade-testdb
 	$(RUN_TASK) sh -c "cd api-server && \
 		pylama rffa tests && \
+		python -m pytest tests && \
 		mypy rffa tests && \
-		python -m pytest tests \
+		isort --check-only rffa/**/*.py tests/**/*.py \
 		"
 
 # Utils

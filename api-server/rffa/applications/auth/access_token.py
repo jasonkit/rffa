@@ -1,10 +1,10 @@
+from datetime import datetime, timedelta
 from typing import Dict
-from datetime import timedelta, datetime
 
 import jwt
 
-from rffa.models.user import TokenPayload
 from rffa.config import config
+from rffa.models.user import TokenPayload
 
 
 def create_access_token(

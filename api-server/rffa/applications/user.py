@@ -1,11 +1,11 @@
-from typing import Tuple
 from datetime import datetime
+from typing import Tuple
 
-from rffa.applications.auth.password import hash_password, check_password
+from rffa import errors
 from rffa.applications.auth.access_token import create_access_token
+from rffa.applications.auth.password import check_password, hash_password
 from rffa.models.user import User, UserQuery
 from rffa.typing import DBSession
-from rffa import errors
 
 
 def register(db_session: DBSession,

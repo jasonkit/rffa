@@ -1,11 +1,11 @@
-from fastapi import status, Depends
+from fastapi import Depends, status
 from pydantic import BaseModel, Field
 
-from rffa.app import app
-from rffa.models.user import UserSchema
-from rffa.applications.user import register, login
-from rffa.dependencies.db import db_session
 from rffa import errors
+from rffa.app import app
+from rffa.applications.user import login, register
+from rffa.dependencies.db import db_session
+from rffa.models.user import UserSchema
 
 
 class CredentialRequest(BaseModel):

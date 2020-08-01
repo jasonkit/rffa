@@ -1,7 +1,8 @@
+from datetime import datetime
+from uuid import uuid4
+
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
-from uuid import uuid4
-from datetime import datetime
 
 from rffa.config import config
 

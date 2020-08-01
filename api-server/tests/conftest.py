@@ -5,9 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from rffa.config import config
-
 from tests.context import TestContext
-
 
 ENGINE = create_engine(os.getenv('TEST_DATABASE_URL'))
 SESSION = sessionmaker()

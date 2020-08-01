@@ -1,7 +1,4 @@
-from rffa.applications.auth.password import (
-    hash_password,
-    check_password,
-)
+from rffa.applications.auth.password import check_password, hash_password
 
 
 def test_hash_password():

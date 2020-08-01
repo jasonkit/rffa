@@ -1,7 +1,7 @@
+import json
+from datetime import datetime
 from enum import Enum
 from typing import Any
-from datetime import datetime
-import json
 
 import sqlalchemy as sa
 from pydantic import BaseModel

@@ -1,14 +1,13 @@
 import pytest
 
-from rffa.models.user import UserQuery, UserSchema
 from rffa import errors
-
+from rffa.models.user import UserQuery, UserSchema
+from tests import fixtures
 from tests.utils import (
+    check_error_response,
     check_minimal_request,
     ensure_dict_match_model,
-    check_error_response,
 )
-from tests import fixtures
 
 
 @pytest.fixture

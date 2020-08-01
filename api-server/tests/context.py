@@ -2,10 +2,9 @@ from fastapi import Request
 from fastapi.testclient import TestClient
 
 from rffa.app import app
-from rffa.dependencies import db
 from rffa.config import config
+from rffa.dependencies import db
 from rffa.models.user import User
-
 from tests import fixtures
 
 

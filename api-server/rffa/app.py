@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-
-from rffa.errors import RFFAHTTPError, InvalidRequestError
+from rffa.errors import InvalidRequestError, RFFAHTTPError
 
 app = FastAPI(
     title='refined:FFA API',

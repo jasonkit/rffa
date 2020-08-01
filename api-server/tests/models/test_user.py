@@ -1,11 +1,6 @@
 from datetime import datetime
 
-from rffa.models.user import (
-    User,
-    UserQuery,
-    UserRole
-)
-
+from rffa.models.user import User, UserQuery, UserRole
 from tests.fixtures.models import minimal_user_data
 
 

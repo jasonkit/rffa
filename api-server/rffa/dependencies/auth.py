@@ -1,8 +1,8 @@
 from fastapi import Header
 
+from rffa import errors
 from rffa.applications.auth.access_token import decode_access_token
 from rffa.models.user import TokenPayload
-from rffa import errors
 
 
 def access_token(
