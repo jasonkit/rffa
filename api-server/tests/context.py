@@ -2,7 +2,6 @@ from fastapi import Request
 from fastapi.testclient import TestClient
 
 from rffa.app import app
-from rffa.config import config
 from rffa.dependencies import db
 from rffa.models.user import User
 from tests import fixtures
@@ -16,12 +15,7 @@ def mock_db_session_depends(session):
         except BaseException:
             pass
 
-        session.begin_nested()
         try:
-            session.execute(
-                'SET search_path TO {}, public'.format(
-                    config.app_name))
-
             if session_config.is_read_only:
                 session.execute('SET TRANSACTION READ ONLY')
 
